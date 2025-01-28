@@ -1,6 +1,6 @@
 let weatherJSON 
-let minTemp = Infinity
-let maxTemp = -Infinity
+let minPrecip = Infinity
+let maxPrecip = -Infinity
 let images = {}
 let dx
 function preload() {
@@ -17,8 +17,8 @@ function setup() {
   // }
   
   for( const p of weatherJSON.properties.periods ) {
-    minTemp = min(p.temperature, minTemp)
-    maxTemp = max(p.temperature, maxTemp)
+    minPrecip =min(p.probabilityOfPrecipitation.value, minPrecip)
+    maxPrecip = max(p.probabilityOfPrecipitation.value, maxPrecip)
     // if( ! (p.icon in images) ) {
     //   images[p.icon] = loadImage(p.icon, fit) 
     // }    
@@ -29,10 +29,10 @@ function setup() {
 function draw() {
   background(220);
   let px = dx // dx * (i+1), where i = 0
-  let py = map( weatherJSON.properties.periods[0].temperature, minTemp, maxTemp, 0.8*height, 0.2*height)
+  let py = map( weatherJSON.properties.periods[0].probabilityOfPrecipitation.value, minPrecip, maxPrecip, 0.8*height, 0.2*height)
   for( let i = 1; i < weatherJSON.properties.periods.length; i++ ) {
     let cx = dx * (i+1)
-    let cy = map( weatherJSON.properties.periods[i].temperature, minTemp, maxTemp, 0.8*height, 0.2*height)
+    let cy = map( weatherJSON.properties.periods[i].probabilityOfPrecipitation.value, minPrecip, maxPrecip, 0.8*height, 0.2*height)
     line(px,py,cx,cy)
     px = cx
     py = cy
@@ -40,7 +40,8 @@ function draw() {
     //   image(images[weatherJSON.properties.periods[i].icon],dx*(i+1),height/2)   
     // }    
   }
-  
+  text("Days",width/2,height-10)
+  text("Probability of Rain",10, height/2)
   // console.log(images)
 }
 
